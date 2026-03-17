@@ -97,88 +97,21 @@ impl XTypesBinding for &'_ [u8] {
     }
 }
 
-impl XTypesBinding for Vec<u8> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(u8::get_dynamic_type(), u32::MAX).build()
-    }
-}
-
-impl XTypesBinding for Vec<u16> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(u16::get_dynamic_type(), u32::MAX).build()
-    }
-}
-
-impl XTypesBinding for Vec<u32> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(u32::get_dynamic_type(), u32::MAX).build()
-    }
-}
-
-impl XTypesBinding for Vec<u64> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(u64::get_dynamic_type(), u32::MAX).build()
-    }
-}
-
-impl XTypesBinding for Vec<i8> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(i8::get_dynamic_type(), u32::MAX).build()
-    }
-}
-
-impl XTypesBinding for Vec<i16> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(i16::get_dynamic_type(), u32::MAX).build()
-    }
-}
-
-impl XTypesBinding for Vec<i32> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(i32::get_dynamic_type(), u32::MAX).build()
-    }
-}
-
-impl XTypesBinding for Vec<i64> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(i64::get_dynamic_type(), u32::MAX).build()
-    }
-}
-
-impl XTypesBinding for Vec<f32> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(f32::get_dynamic_type(), u32::MAX).build()
-    }
-}
-
-impl XTypesBinding for Vec<f64> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(f64::get_dynamic_type(), u32::MAX).build()
-    }
-}
-
-impl XTypesBinding for Vec<String> {
-    fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(String::get_dynamic_type(), u32::MAX)
-            .build()
-    }
-}
-
 impl<T: TypeSupport> XTypesBinding for T {
     fn get_dynamic_type() -> DynamicType {
         T::get_type()
     }
 }
 
-impl<T: XTypesBinding, const N: usize> XTypesBinding for [T; N] {
+impl<T: XTypesBinding> XTypesBinding for Vec<T> {
     fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_array_type(T::get_dynamic_type(), vec![N as u32]).build()
+        DynamicTypeBuilderFactory::create_sequence_type(T::get_dynamic_type(), u32::MAX).build()
     }
 }
 
-impl<T: TypeSupport> XTypesBinding for Vec<T> {
+impl<T: XTypesBinding, const N: usize> XTypesBinding for [T; N] {
     fn get_dynamic_type() -> DynamicType {
-        DynamicTypeBuilderFactory::create_sequence_type(T::get_type(), u32::MAX).build()
+        DynamicTypeBuilderFactory::create_array_type(T::get_dynamic_type(), vec![N as u32]).build()
     }
 }
 
