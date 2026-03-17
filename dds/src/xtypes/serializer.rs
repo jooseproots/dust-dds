@@ -298,7 +298,9 @@ trait XTypesSerializer {
             TypeKind::UINT8 => {
                 self.serialize_sequence_basic(v.get_sequence_values::<u8>(member_id)?)
             }
-            TypeKind::CHAR8 => todo!(),
+            TypeKind::CHAR8 => {
+                self.serialize_sequence_basic(v.get_sequence_values::<char>(member_id)?)
+            }
             TypeKind::CHAR16 => todo!(),
             TypeKind::STRING8 => {
                 let list = v.get_sequence_values::<String>(member_id)?;
@@ -309,7 +311,13 @@ trait XTypesSerializer {
             }
             TypeKind::STRING16 => todo!(),
             TypeKind::ALIAS => todo!(),
-            TypeKind::ENUM => todo!(),
+            TypeKind::ENUM => {
+                let list = v.get_sequence_values::<DynamicData>(member_id)?;
+                self.serialize_primitive_type(&(list.len() as u32));
+                for v in list {
+                    self.serialize_enum(v)?;
+                }
+            }
             TypeKind::BITMASK => todo!(),
             TypeKind::ANNOTATION => todo!(),
             TypeKind::STRUCTURE => {
@@ -339,7 +347,9 @@ trait XTypesSerializer {
             .expect("array has element type");
         match element_type.get_descriptor().kind {
             TypeKind::NONE => todo!(),
-            TypeKind::BOOLEAN => todo!(),
+            TypeKind::BOOLEAN => {
+                self.serialize_array_basic(v.get_sequence_values::<bool>(member_id)?)
+            }
             TypeKind::BYTE => self.serialize_array_basic(v.get_sequence_values::<u8>(member_id)?),
             TypeKind::INT16 => self.serialize_array_basic(v.get_sequence_values::<i16>(member_id)?),
             TypeKind::INT32 => self.serialize_array_basic(v.get_sequence_values::<i32>(member_id)?),
@@ -362,7 +372,9 @@ trait XTypesSerializer {
             TypeKind::FLOAT128 => todo!(),
             TypeKind::INT8 => self.serialize_array_basic(v.get_sequence_values::<i8>(member_id)?),
             TypeKind::UINT8 => self.serialize_array_basic(v.get_sequence_values::<u8>(member_id)?),
-            TypeKind::CHAR8 => todo!(),
+            TypeKind::CHAR8 => {
+                self.serialize_array_basic(v.get_sequence_values::<char>(member_id)?)
+            }
             TypeKind::CHAR16 => todo!(),
             TypeKind::STRING8 => {
                 for v in v.get_sequence_values::<String>(member_id)? {
@@ -371,7 +383,11 @@ trait XTypesSerializer {
             }
             TypeKind::STRING16 => todo!(),
             TypeKind::ALIAS => todo!(),
-            TypeKind::ENUM => todo!(),
+            TypeKind::ENUM => {
+                for v in v.get_sequence_values::<DynamicData>(member_id)? {
+                    self.serialize_enum(v)?;
+                }
+            }
             TypeKind::BITMASK => todo!(),
             TypeKind::ANNOTATION => todo!(),
             TypeKind::STRUCTURE => {
