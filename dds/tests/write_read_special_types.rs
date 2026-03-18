@@ -1031,8 +1031,6 @@ fn foo_sequence_of_bools_should_read_and_write() {
     assert_eq!(samples[0].data.as_ref().unwrap(), &data);
 }
 
-////// TODO: delete!
-
 #[test]
 fn foo_array_of_chars_should_read_and_write() {
     #[derive(Clone, Debug, PartialEq, DdsType)]
